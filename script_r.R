@@ -1,5 +1,6 @@
 # Chargement des bibliothèques
 install.packages('xgboost')
+install.packages('readr')
 
 library(ggplot2)
 library(dplyr)
