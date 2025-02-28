@@ -41,7 +41,7 @@ library(GGally)
 # ----------------------------
 # 2. Set Working Directory
 # ----------------------------
-setwd("D:/Coding/Projects 2/Audio Genres")
+setwd("C:/Users/anas9/Documents/2024-2025/s5/data_mining/projet_git/MusicalGenrePrediction")
 
 # ----------------------------
 # 3. Load Data
@@ -315,17 +315,6 @@ top_data_long <- data %>%
   select(all_of(top_features), label) %>%
   pivot_longer(-label, names_to = "Feature", values_to = "Value")
 
-# Violin plots for distribution shape
-ggplot(top_data_long, aes(x = label, y = Value, fill = label)) +
-  geom_violin(trim = FALSE, alpha = 0.6) +
-  facet_wrap(~ Feature, scales = "free", ncol = 3) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(
-    title = "Violin Plots of Top XGBoost Features by Genre",
-    x = "Genre",
-    y = "Value"
-  )
 
 # (Optional) Pairwise relationships among these top features
 ggpairs(
