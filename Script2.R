@@ -177,7 +177,12 @@ pca_result <- PCA(as.data.frame(numeric_features_scaled), graph = FALSE)
 
 # Scree plot - variance explained
 fviz_eig(pca_result) + 
-  labs(title = "Scree Plot: Variance Explained by PCA Components")
+  labs(title = "Scree Plot: Variance Explained by PCA Components") +
+  theme(
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    plot.title = element_text(size = 16, face = "bold")
+  )
 
 # Define palette for genres (adjust if you have different number of genres)
 colors <- c("red", "blue", "green", "purple", "orange", 
@@ -190,16 +195,24 @@ fviz_pca_ind(
   col.ind = data$label,  # Use label for colors
   palette = colors,
   addEllipses = TRUE,
-  legend.title = "Genre"
+  legend.title = "Genre",
+  alpha.ind = 0.4  # Transparency level, adjust if needed (0 = fully transparent, 1 = fully opaque)
 ) +
   theme_minimal() +
   labs(title = "PCA Projection of Musical Genres")
 
 # Variable contribution to PCs
-fviz_pca_var(pca_result, col.var = "contrib") +
+top_vars <- names(sort(rowSums(get_pca_var(pca_result)$contrib), decreasing = TRUE)[1:20])
+
+fviz_pca_var(
+  pca_result,
+  col.var = "contrib",
+  select.var = list(name = top_vars),
+  arrow.size = 1.2
+) +
   scale_color_gradient(low = "blue", high = "red") +
-  theme_minimal() +
-  labs(title = "PCA: Feature Contributions")
+  theme_minimal(base_size = 14) +
+  labs(title = "PCA: Top 20 Feature Contributions")
 
 # ----------------------------
 # 10. Train/Test Split
@@ -315,19 +328,8 @@ top_data_long <- data %>%
   select(all_of(top_features), label) %>%
   pivot_longer(-label, names_to = "Feature", values_to = "Value")
 
-# Violin plots for distribution shape
-ggplot(top_data_long, aes(x = label, y = Value, fill = label)) +
-  geom_violin(trim = FALSE, alpha = 0.6) +
-  facet_wrap(~ Feature, scales = "free", ncol = 3) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(
-    title = "Violin Plots of Top XGBoost Features by Genre",
-    x = "Genre",
-    y = "Value"
-  )
 
-# (Optional) Pairwise relationships among these top features
+# Pairwise relationships among these top features
 ggpairs(
   data %>% select(all_of(top_features), label),
   aes(color = label, alpha = 0.5),
@@ -339,4 +341,5 @@ ggpairs(
 ################################################################################
 # END
 ################################################################################
+
 
