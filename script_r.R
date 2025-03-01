@@ -23,7 +23,7 @@ setwd("C:/Users/anas9/Documents/2024-2025/s5/data_mining/projet_git/MusicalGenre
 # Chargement des données
 data <- read_csv("data/features_30_sec.csv/features_30_sec.csv")
 
-# Aperçu des données
+# Aperçu des donnée
 print(dim(data))  # Dimensions du dataset
 print(str(data))  # Structure des données
 print(summary(data))  # Statistiques descriptives
